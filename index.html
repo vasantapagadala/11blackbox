@@ -3,7 +3,6 @@
 <head>
   <title>Budget Tracker</title>
   <style>
-    /* Add your CSS styles here */
     body {
       font-family: Arial, sans-serif;
     }
@@ -33,16 +32,19 @@
 <body>
   <h1>Budget Tracker</h1>
   <form id="expense-form">
+    <label for="expense-name">Expense name:</label>
     <input type="text" id="expense-name" placeholder="Expense name" required>
+    
+    <label for="expense-amount">Expense amount:</label>
     <input type="number" id="expense-amount" placeholder="Expense amount" required step="0.01">
     <button type="submit">Add Expense</button>
   </form>
   <table id="expense-list">
     <thead>
       <tr>
-        <th>Expense Name</th>
-        <th>Amount</th>
-        <th>Delete</th>
+        <th style="background-color: #333; color: #fff;">Expense Name</th>
+        <th style="background-color: #333; color: #fff;">Amount</th>
+        <th style="background-color: #333; color: #fff;">Delete</th>
       </tr>
     </thead>
     <tbody>
