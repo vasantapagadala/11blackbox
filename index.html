@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Budget Tracker</title>
+  <style>
+    /* Add your CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    table {
+      width: 50%;
+      margin: 0 auto;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    .delete-btn {
+      cursor: pointer;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Budget Tracker</h1>
+  <form id="expense-form">
+    <input type="text" id="expense-name" placeholder="Expense name" required>
+    <input type="number" id="expense-amount" placeholder="Expense amount" required step="0.01">
+    <button type="submit">Add Expense</button>
+  </form>
+  <table id="expense-list">
+    <thead>
+      <tr>
+        <th>Expense Name</th>
+        <th>Amount</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Expenses will be rendered here -->
+    </tbody>
+  </table>
+  <p>Total Amount: $<span id="total-amount">0.00</span></p>
+  <script>
+    // Add your JavaScript code here
+    const expenseForm = document.getElementById('expense-form');
+    const expenseList = document.getElementById('expense-list');
+    const totalAmountElement = document.getElementById('total-amount');
+    let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+    function renderExpenses() {
+      expenseList.innerHTML = '';
+      let totalAmount = 0;
+      for (let i = 0; i < expenses.length; i++) {
+        const expense = expenses[i];
+        const expenseRow = document.createElement('tr');
+        expenseRow.innerHTML = `
+          <td>${expense.name}</td>
+          <td>$${expense.amount}</td>
+          <td class="delete-btn" data-id="${i}">Delete</td>
+        `;
+        expenseList.appendChild(expenseRow);
+        totalAmount += expense.amount;
+      }
+      totalAmountElement.textContent = totalAmount.toFixed(2);
+      localStorage.setItem('expenses', JSON.stringify(expenses));
+    }
+
+    expenseForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const expenseName = document.getElementById('expense-name');
+      const expenseAmount = document.getElementById('expense-amount');
+      if (!expenseName.value || !expenseAmount.value) return;
+      expenses.push({ name: expenseName.value, amount: parseFloat(expenseAmount.value) });
+      expenseName.value = '';
+      expenseAmount.value = '';
+      renderExpenses();
+    });
+
+    expenseList.addEventListener('click', (e) => {
+      if (e.target.classList.contains('delete-btn')) {
+        expenses.splice(e.target.dataset.id, 1);
+        renderExpenses();
+      }
+    });
+
+    renderExpenses();
+  </script>
+</body>
+</html>
